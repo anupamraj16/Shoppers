@@ -10,12 +10,12 @@ const multer = require('multer');
 const helmet = require('helmet');
 const compression = require('compression');
 
-const errorController = require('./controllers/error');
-const shopController = require('./controllers/shop');
+const errorController = require('./controllers/errorController');
+const shopController = require('./controllers/shopController');
 const User = require('./models/user');
-const adminRoutes = require('./routes/admin');
-const shopRoutes = require('./routes/shop');
-const authRoutes = require('./routes/auth');
+const adminRoutes = require('./routes/adminRoutes');
+const shopRoutes = require('./routes/shopRoutes');
+const authRoutes = require('./routes/authRoutes');
 const isAuth = require('./middleware/is-auth');
 
 const app = express();
@@ -58,14 +58,14 @@ app.use(compression());
 // Parse body
 app.use(bodyParser.urlencoded({ extended: false }));
 
+// Save user uploads
 app.use(
   multer({ storage: fileStorage, fileFilter: fileFilter }).single('image')
 );
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.enable('trust proxy');
 
@@ -125,11 +125,11 @@ app.use(authRoutes);
 app.use(errorController.get404);
 
 // Global error handler
-// app.use((error, req, res, next) => {
-//   res.status(500).render('500', {
-//     pageTitle: 'Error!',
-//     path: '/500',
-//     // isAuthenticated: req.session.isLoggedIn,
-//   });
-// });
+app.use((error, req, res, next) => {
+  res.status(500).render('500', {
+    pageTitle: 'Error!',
+    path: '/500',
+    isAuthenticated: req.session.isLoggedIn,
+  });
+});
 module.exports = app;

@@ -3,6 +3,7 @@
     "NODE_ENV": "production",
     "DATABASE": "mongodb+srv://anupamraj16:Tab!31enter@cluster0-m9v4c.mongodb.net/shop?retryWrites=true&w=majority",
     "SECRET": "kungpaochicken",
-    "STRIPE_KEY": "sk_test_51HBkuMDnHdLWqgo0vdGKL7LXLVO76sky3zwNgM1nh1Yg5fuops4cyWjrHWchpdYoMARy6DumKT5IvDd5dkHu5Sc200lKYcdjOW"
+    "STRIPE_KEY": "sk_test_51HBkuMDnHdLWqgo0vdGKL7LXLVO76sky3zwNgM1nh1Yg5fuops4cyWjrHWchpdYoMARy6DumKT5IvDd5dkHu5Sc200lKYcdjOW",
+    "SENDGRID": "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"
   }
 }

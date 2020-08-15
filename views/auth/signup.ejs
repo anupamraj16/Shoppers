@@ -1,6 +1,6 @@
 <%- include('../includes/head.ejs') %>
-    <link rel="stylesheet" href="/css/forms.css">
-    <link rel="stylesheet" href="/css/auth.css">
+    <!-- <link rel="stylesheet" href="/css/forms.css"> -->
+    <!-- <link rel="stylesheet" href="/css/auth.css"> -->
 </head>
 
 <body>
@@ -10,36 +10,62 @@
         <% if (errorMessage) { %>
             <div class="user-message user-message--error"><%= errorMessage %></div>
         <% } %>
-        <form class="login-form" action="/signup" method="POST" novalidate>
-            <div class="form-control">
-                <label for="email">E-Mail</label>
-                <input 
-                    class="<%= validationErrors.find(e => e.param === 'email') ? 'invalid' : '' %>"
-                    type="email" 
-                    name="email" 
-                    id="email" 
-                    value="<%= oldInput.email %>">
+        <div class="card container" style="width: 30rem;">
+            <img src="/img/logo-white.jpg" class="card-img-top" alt="Image Here">
+            <div class="card-body">
+                <form class="login-form" action="/signup" method="POST" novalidate>
+                    <div class="form-group">
+        
+                        <div class="input-group flex-nowrap">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="addon-wrapping">@</span>
+                              </div>
+                            <input 
+                                class="form-control form-control-lg <%= validationErrors.find(e => e.param === 'email') ? 'invalid' : '' %>"
+                                type="email" 
+                                name="email" 
+                                id="email"
+                                placeholder="Email"
+                                aria-label="Username" aria-describedby="addon-wrapping"
+                                value="<%= oldInput.email %>">
+                        </div>
+                      
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group flex-nowrap">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="addon-wrapping">&#8226</span>
+                            </div>
+                            <input 
+                                class="form-control form-control-lg <%= validationErrors.find(e => e.param === 'password') ? 'invalid' : '' %>"
+                                type="password" 
+                                name="password" 
+                                id="password" 
+                                placeholder="Password"
+                                value="<%= oldInput.password %>">
+                        </div>
+                        
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group flex-nowrap">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="addon-wrapping">&#8226</span>
+                            </div>
+                    <input 
+                                class="form-control form-control-lg <%= validationErrors.find(e => e.param === 'confirmPassword') ? 'invalid' : '' %>"
+                                type="password" 
+                                name="confirmPassword" 
+                                id="confirmPassword" 
+                                placeholder="Confirm Password"
+                                value="<%= oldInput.confirmPassword %>">
+                            </div>
+                        
+                        </div>
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <button class="btn btn-primary btn-lg" type="submit">Signup</button>
+                 
+                </form>
             </div>
-            <div class="form-control">
-                <label for="password">Password</label>
-                <input 
-                    class="<%= validationErrors.find(e => e.param === 'password') ? 'invalid' : '' %>"
-                    type="password" 
-                    name="password" 
-                    id="password" 
-                    value="<%= oldInput.password %>">
-            </div>
-            <div class="form-control">
-                <label for="confirmPassword">Confirm Password</label>
-                <input 
-                    class="<%= validationErrors.find(e => e.param === 'confirmPassword') ? 'invalid' : '' %>"
-                    type="password" 
-                    name="confirmPassword" 
-                    id="confirmPassword" 
-                    value="<%= oldInput.confirmPassword %>">
-            </div>
-            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-            <button class="btn" type="submit">Signup</button>
-        </form>
+        </div>
     </main>
 <%- include('../includes/end.ejs') %>
