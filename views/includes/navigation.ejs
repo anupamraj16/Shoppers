@@ -7,18 +7,6 @@
       href="/"
       >Shopper's</a
     >
-    <!-- <button
-      class="navbar-toggler"
-      type="button"
-      data-toggle="collapse"
-      data-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button> -->
-
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <form class="form-inline my-2 my-lg-0">
         <input
@@ -30,8 +18,9 @@
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
           Search
         </button>
+        <!-- <ion-icon name="search-outline"></ion-icon> -->
       </form>
-      <ul class="navbar-nav mr-auto nav nav-tabs">
+      <ul class="navbar-nav mr-auto">
         <li class="nav-item">
           <a
             class="nav-link <%= path === '/products' ? 'active' : '' %>"
@@ -39,61 +28,9 @@
             >Products</a
           >
         </li>
-
-        <% if (isAuthenticated) { %>
-        <li class="nav-item">
-          <a
-            class="nav-link <%= path === '/cart' ? 'active' : '' %>"
-            href="/cart"
-            >Cart</a
-          >
-        </li>
-
-        <li class="nav-item">
-          <a
-            class="nav-link <%= path === '/orders' ? 'active' : '' %>"
-            href="/orders"
-            >Orders</a
-          >
-        </li>
-        <li class="nav-item">
-          <a
-            class="nav-link <%= path === '/admin/add-product' ? 'active' : '' %>"
-            href="/admin/add-product"
-            >Add Product
-          </a>
-        </li>
-        <li class="nav-item">
-          <a
-            class="nav-link <%= path === '/admin/products' ? 'active' : '' %>"
-            href="/admin/products"
-            >Admin Products
-          </a>
-        </li>
-        <% } %>
-
-        <li class="nav-item dropdown">
-          <a
-            class="nav-link dropdown-toggle"
-            href="#"
-            id="navbarDropdown"
-            role="button"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-          >
-            Dropdown
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Something else here</a>
-          </div>
-        </li>
       </ul>
 
-      <ul class="navbar-nav mr-auto nav nav-tabs">
+      <ul class="navbar-nav">
         <% if (!isAuthenticated) { %>
         <li class="nav-item">
           <a
@@ -110,11 +47,62 @@
           >
         </li>
         <% } else { %>
-        <li class="nav-link">
-          <form action="/logout" method="post">
-            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-            <button class="btn btn-primary" type="submit">Logout</button>
-          </form>
+
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="navbarDropdown"
+            role="button"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            Admin
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a
+              class="nav-link <%= path === '/admin/products' ? 'active' : '' %>"
+              href="/admin/products"
+              >Listed Products
+            </a>
+            <a
+              class="nav-link <%= path === '/admin/add-product' ? 'active' : '' %>"
+              href="/admin/add-product"
+              >Add Product
+            </a>
+          </div>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="navbarDropdown"
+            role="button"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            Account
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a
+              class="nav-link <%= path === '/cart' ? 'active' : '' %>"
+              href="/cart"
+              >Cart</a
+            >
+            <a
+              class="nav-link <%= path === '/orders' ? 'active' : '' %>"
+              href="/orders"
+              >Orders</a
+            >
+            <div class="dropdown-divider"></div>
+            <form action="/logout" method="post">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+              <button class="btn" type="submit">Logout</button>
+            </form>
+          </div>
         </li>
         <% } %>
       </ul>

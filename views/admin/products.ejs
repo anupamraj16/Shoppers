@@ -1,5 +1,4 @@
 <%- include('../includes/head.ejs') %>
-    <link rel="stylesheet" href="/css/product.css">
     </head>
 
     <body>
@@ -7,9 +6,32 @@
 
             <main>
                 <% if (prods.length > 0) { %>
+                    
                     <div class="grid">
                         <% for (let product of prods) { %>
-                            <article class="card product-item">
+                            <div class="card product-item" style="width: 22rem;">
+                                <header class="card__header">
+                                    <h1 class="product__title">
+                                        <%= product.title %>
+                                    </h1>
+                                </header>
+                                <img src="/<%= product.imageUrl %>" class="card-img-top" alt="<%= product.title %>">
+                                <div class="card-body">
+                                    <h2 class="product__price">$
+                                        <%= product.price %>
+                                    </h2>
+                                    <p class="product__description">
+                                        <%= product.description %>
+                                    </p>
+                                </div>
+                                <div class="card__actions">
+                                    <a href="/admin/edit-product/<%= product._id %>?edit=true" class="btn btn-secondary">Edit</a>
+                                    <input type="hidden" value="<%= product._id %>" name="productId">
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                    <button class="btn btn-light" type="button" onclick="deleteProduct(this)">Delete</button>
+                                </div>
+                              </div>
+                            <!-- <article class="card product-item">
                                 <header class="card__header">
                                     <h1 class="product__title">
                                         <%= product.title %>
@@ -32,9 +54,10 @@
                                     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                     <button class="btn" type="button" onclick="deleteProduct(this)">Delete</button>
                                 </div>
-                            </article>
+                            </article> -->
                             <% } %>
                     </div>
+                    <%- include('../includes/pagination.ejs', {currentPage: currentPage, nextPage: nextPage, previousPage: previousPage, lastPage: lastPage, hasNextPage: hasNextPage, hasPreviousPage: hasPreviousPage}) %>
                     <% } else { %>
                         <h1>No Products Found!</h1>
                         <% } %>
