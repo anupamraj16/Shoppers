@@ -1,6 +1,5 @@
 <%- include('../includes/head.ejs') %>
-    <!-- <link rel="stylesheet" href="/css/forms.css"> -->
-    <!-- <link rel="stylesheet" href="/css/auth.css"> -->
+
 </head>
 
 <body>
@@ -18,7 +17,7 @@
         
                         <div class="input-group flex-nowrap">
                             <div class="input-group-prepend">
-                                <span class="input-group-text" id="addon-wrapping">@</span>
+                                <span class="input-group-text">@</span>
                               </div>
                             <input 
                                 class="form-control form-control-lg <%= validationErrors.find(e => e.param === 'email') ? 'invalid' : '' %>"
@@ -26,7 +25,7 @@
                                 name="email" 
                                 id="email"
                                 placeholder="Email"
-                                aria-label="Username" aria-describedby="addon-wrapping"
+                                aria-label="Username"
                                 value="<%= oldInput.email %>">
                         </div>
                       
@@ -34,7 +33,7 @@
                     <div class="form-group">
                         <div class="input-group flex-nowrap">
                             <div class="input-group-prepend">
-                                <span class="input-group-text" id="addon-wrapping">&#8226</span>
+                                <span class="input-group-text">&#8226</span>
                             </div>
                             <input 
                                 class="form-control form-control-lg <%= validationErrors.find(e => e.param === 'password') ? 'invalid' : '' %>"
@@ -49,7 +48,7 @@
                     <div class="form-group">
                         <div class="input-group flex-nowrap">
                             <div class="input-group-prepend">
-                                <span class="input-group-text" id="addon-wrapping">&#8226</span>
+                                <span class="input-group-text">&#8226</span>
                             </div>
                     <input 
                                 class="form-control form-control-lg <%= validationErrors.find(e => e.param === 'confirmPassword') ? 'invalid' : '' %>"

@@ -3,16 +3,23 @@
 
     <body>
         <%- include('../includes/navigation.ejs') %>
-        <main class="centered">
-            <h1><%= product.title %></h1>
+        <div class="card product-item" style="width: 22rem; margin: 16px 0 16px 0;">
+            <header class="card__header text-center">
+                <h1 class="product__title">
+                    <%= product.title %>
+                </h1>
+            </header>
             <hr>
-            <div class="image">
-                <img src="/<%= product.imageUrl %>" alt="<%= product.title %>">
-            </div>
-            <h2><%= product.price %></h2>
-            <p><%= product.description %></p>
+            <img src="/<%= product.imageUrl %>" class="card-img-top" alt="<%= product.title %>">
+            <div class="card-body text-center">
+                <h2 class="product__price">$
+                    <%= product.price %>
+                </h2>
+                <p class="product__description">
+                    <%= product.description %>
+                </p>
             <% if (isAuthenticated) { %>
                 <%- include('../includes/add-to-cart.ejs', {product: product}) %>
             <% } %>
-        </main>
+            </div>
         <%- include('../includes/end.ejs') %>

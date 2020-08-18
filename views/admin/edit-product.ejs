@@ -38,14 +38,15 @@
                     </div> -->
                     <div class="form-group">
                         <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text">Upload</span>
-                            </div>
-                            <div class="custom-file">
+                            <!-- <div class="input-group-prepend">
+                              <span class="input-group-text" style="width: 5rem;">Upload</span>
+                            </div> -->
+                            <div class="custom-file form-control-lg">
                               <input type="file" class="custom-file-input" name=image id="image" aria-describedby="inputGroupFileAddon01">
-                              <label class="custom-file-label" for="image"></label>
+                              <label class="custom-file-label" for="image">Choose File</label>
                             </div>
                           </div>
+                          
                     </div>
 
                     <div class="form-group">
@@ -79,7 +80,7 @@
                         <input type="hidden" value="<%= product._id %>" name="productId">
                     <% } %>
                     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                    <button class="btn btn-primary btn-lg" type="submit"><% if (editing) { %>Update Product<% } else { %>Add Product<% } %></button>
+                    <button class="btn btn-secondary btn-lg" type="submit"><% if (editing) { %>Update Product<% } else { %>Add Product<% } %></button>
                 </form>
             </div>
         </div>

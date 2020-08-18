@@ -1,32 +1,47 @@
 <%- include('../includes/head.ejs') %>
-    <link rel="stylesheet" href="/css/cart.css">
     </head>
 
     <body>
         <%- include('../includes/navigation.ejs') %>
         <main>
             <% if (products.length > 0) { %>
-                <ul class="cart__item-list">
-                    <% products.forEach(p => { %>
-                        <li class="cart__item">
-                            <h1><%= p.productId.title %></h1>
-                            <h2>Quantity: <%= p.quantity %></h2>
-                            <form action="/cart-delete-item" method="POST">
-                                <input type="hidden" value="<%= p.productId._id %>" name="productId">
-                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                                <button class="btn danger" type="submit">Delete</button>
-                            </form>
-                        </li>
-                    <% }) %>
-                </ul>
-                <hr>
-                <div class="centered">
-                    <!--<form action="/create-order" method="POST">
-                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                        <button type="submit" class="btn">Order Now!</button>
-                    </form>-->
-                    <a class="btn" href="/checkout">Order Now!</a>
+                <div class="flex-container" style="display: flex;">
+                    <div class="flex-container" style="width: 70%; display: flex; flex-direction: column;">
+                        <% products.forEach(p => { %>
+                            <div class="card flex-row">
+                                <header class="card__header" style="width: 50%;">
+                                    <h4 class="product__title">
+                                        <%= p.productId.title %>
+                                    </h4>
+                                </header>
+                                <div class="card-body text-right" style="width: 50%;">
+                                    <p class="card-text">Quantity: <%= p.quantity %></p>
+                                    <p class="card-text">$ <%= p.productId.price %></p>
+                                    <form action="/cart-delete-item" method="POST">
+                                        <input type="hidden" value="<%= p.productId._id %>" name="productId">
+                                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                        <button class="btn btn-outline-danger btn-sm" type="submit">Delete</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <hr>
+                        <% }) %>
+                    </div>
+                    <div class="flex-container" style="width: 30%; display: flex; flex-direction: column;">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <p>Subtotal (total <%= items %> <%= items === 1 ? 'item':'items' %>) $ <%= totalSum %></p>
+                                <hr>
+                                <form action="/create-order" method="POST">
+                                
+                                    <button class="btn btn-secondary" type="button">Place Order</button>
+                                    <!-- <a class="btn btn-secondary" href="/checkout" style="width: 10rem;">Order Now!</a> -->
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                
                 
             <% } else { %>
                 <h1>No Products in Cart!</h1>

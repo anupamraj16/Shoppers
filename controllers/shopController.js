@@ -48,10 +48,22 @@ exports.getProduct = catchAsync(async (req, res, next) => {
 exports.getCart = catchAsync(async (req, res, next) => {
   await req.user.populate('cart.items.productId').execPopulate();
   const products = req.user.cart.items;
+
+  let total = 0;
+  let items = 0;
+  products.forEach((p) => {
+    total += p.quantity * p.productId.price;
+  });
+  products.forEach((p) => {
+    items += p.quantity;
+  });
+
   res.render('shop/cart', {
     path: '/cart',
     pageTitle: 'Your Cart',
     products: products,
+    totalSum: total,
+    items,
   });
 });
 
@@ -59,29 +71,13 @@ exports.postCart = catchAsync(async (req, res, next) => {
   const prodId = req.body.productId;
   const product = await Product.findById(prodId);
   await req.user.addToCart(product);
-  res.redirect('/cart');
+  res.redirect('/');
 });
 
 exports.postCartDeleteProduct = catchAsync(async (req, res, next) => {
   const prodId = req.body.productId;
   await req.user.removeFromCart(prodId);
   res.redirect('/cart');
-});
-
-exports.getCheckout = catchAsync(async (req, res, next) => {
-  const user = await req.user.populate('cart.items.productId').execPopulate();
-
-  const products = user.cart.items;
-  let total = 0;
-  products.forEach((p) => {
-    total += p.quantity * p.productId.price;
-  });
-  res.render('shop/checkout', {
-    path: '/checkout',
-    pageTitle: 'Checkout',
-    products: products,
-    totalSum: total,
-  });
 });
 
 exports.postOrder = catchAsync(async (req, res, next) => {

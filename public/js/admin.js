@@ -1,22 +1,24 @@
-const deleteProduct = (btn) => {
-  const prodId = btn.parentNode.querySelector('[name=productId]').value;
-  const csrf = btn.parentNode.querySelector('[name=_csrf]').value;
+$(document).ready(function () {
+  $('.admin-delete').click(function () {
+    const prodId = $(this).siblings('[name=productId]')[0].value;
+    const csrf = $(this).siblings('[name=_csrf]')[0].value;
 
-  const productElement = btn.closest('article');
+    const productElement = $(this).closest('article');
 
-  fetch('/admin/product/' + prodId, {
-    method: 'DELETE',
-    headers: {
-      'csrf-token': csrf,
-    },
-  })
-    .then((result) => {
-      return result.json();
+    fetch('/admin/product/' + prodId, {
+      method: 'DELETE',
+      headers: {
+        'csrf-token': csrf,
+      },
     })
-    .then((data) => {
-      productElement.parentNode.removeChild(productElement);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};
+      .then((result) => {
+        return result.json();
+      })
+      .then((data) => {
+        productElement.remove();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+});
