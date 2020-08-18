@@ -42,7 +42,7 @@
                               <span class="input-group-text" style="width: 5rem;">Upload</span>
                             </div> -->
                             <div class="custom-file form-control-lg">
-                              <input type="file" class="custom-file-input" name=image id="image" aria-describedby="inputGroupFileAddon01">
+                              <input type="file" class="custom-file-input" name=image id="image">
                               <label class="custom-file-label" for="image">Choose File</label>
                             </div>
                           </div>
@@ -69,7 +69,7 @@
                     <div class="form-group">
                         <div class="input-group flex-nowrap">
                             <textarea 
-                            class="form-control <%= validationErrors.find(e => e.param === 'description') ? 'invalid' : '' %>"
+                            class="form-control form-control-lg <%= validationErrors.find(e => e.param === 'description') ? 'invalid' : '' %>"
                             name="description" 
                             id="description" 
                             placeholder="Description"
