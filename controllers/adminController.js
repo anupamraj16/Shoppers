@@ -164,7 +164,7 @@ exports.deleteProduct = catchAsync(async (req, res, next) => {
   if (!product) {
     return next(new Error('Product not found.'));
   }
-  fileHelper.deleteFile(product.imageUrl);
+  // fileHelper.deleteFile(product.imageUrl);
   await Product.deleteOne({ _id: prodId, userId: req.user._id });
   res.status(200).json({ status: 'success!' });
 });
