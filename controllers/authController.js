@@ -70,6 +70,7 @@ exports.postLogin = catchAsync(async (req, res, next) => {
 
   if (doMatch) {
     req.session.isLoggedIn = true;
+    console.log(req.session.isLoggedIn);
     req.session.user = user;
     await req.session.save(() => {
       return res.redirect('/');

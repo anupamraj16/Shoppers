@@ -32,10 +32,21 @@
                             <div class="card-body">
                                 <p>Subtotal (total <%= items %> <%= items === 1 ? 'item':'items' %>) $ <%= totalSum %></p>
                                 <hr>
-                                <form action="/create-order" method="POST">
-                                    <button class="btn btn-secondary" type="button">Place Order</button>
-                                </form>
+                                
+                                <button id='order-btn' class="btn btn-secondary" type="submit">Place Order</button>
+                                
+                                <script>
+                                    var stripe = Stripe('pk_test_51HBkokBiPV2ZWFlqOVQ8Llkx050VloklkRkieBSWqhL8d7tUzO6eTQsEUaLNcGhETghbg2WbxleHBQRd9MNIsV6K00HLaQrc0C');
+                                    var orderBtn = document.getElementById('order-btn');
+                                    orderBtn.addEventListener('click', function() {
+                                        stripe.redirectToCheckout({
+                                        sessionId: '<%= sessionId %>'
+                                        });
+                                    });
+                                </script>
                             </div>
+                            
+                            
                         </div>
                     </div>
                 </div>

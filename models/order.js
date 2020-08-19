@@ -18,6 +18,10 @@ const orderSchema = new mongoose.Schema({
       ref: 'User',
     },
   },
+  createdAt: {
+    type: Date,
+    default: Date.now(),
+  },
 });
 
 module.exports = mongoose.model('Order', orderSchema);

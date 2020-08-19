@@ -48,7 +48,6 @@ exports.getProduct = catchAsync(async (req, res, next) => {
 exports.getCart = catchAsync(async (req, res, next) => {
   await req.user.populate('cart.items.productId').execPopulate();
   const products = req.user.cart.items;
-
   let total = 0;
   let items = 0;
   products.forEach((p) => {
@@ -57,6 +56,32 @@ exports.getCart = catchAsync(async (req, res, next) => {
   products.forEach((p) => {
     items += p.quantity;
   });
+
+  if (items > 0) {
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      success_url: `${req.protocol}://${req.get('host')}/create-order`,
+      cancel_url: `${req.protocol}://${req.get('host')}/cart`,
+      line_items: products.map((p) => {
+        return {
+          name: p.productId.title,
+          description: p.productId.description,
+          amount: p.productId.price * 100,
+          currency: 'usd',
+          quantity: p.quantity,
+        };
+      }),
+    });
+
+    return res.render('shop/cart', {
+      path: '/cart',
+      pageTitle: 'Your Cart',
+      products: products,
+      totalSum: total,
+      items,
+      sessionId: session.id,
+    });
+  }
 
   res.render('shop/cart', {
     path: '/cart',
@@ -84,6 +109,7 @@ exports.postOrder = catchAsync(async (req, res, next) => {
   // Token is created using Checkout or Elements!
   // Get the payment token ID submitted by the form:
   const token = req.body.stripeToken; // Using Express
+
   let totalSum = 0;
   const user = await req.user.populate('cart.items.productId').execPopulate();
   user.cart.items.forEach((p) => {
@@ -99,20 +125,23 @@ exports.postOrder = catchAsync(async (req, res, next) => {
     },
     products: products,
   });
+
   await order.save();
-  const charge = await stripe.charges.create({
-    amount: totalSum * 100,
-    currency: 'usd',
-    description: 'Demo Order',
-    source: token,
-    metadata: { order_id: result._id.toString() },
-  });
+  // const charge = await stripe.charges.create({
+  //   amount: totalSum * 100,
+  //   currency: 'usd',
+  //   description: 'Demo Order',
+  //   source: token,
+  //   metadata: { order_id: result._id.toString() },
+  // });
+
   req.user.clearCart();
   res.redirect('/orders');
 });
 
 exports.getOrders = catchAsync(async (req, res, next) => {
   const orders = await Order.find({ 'user.userId': req.user._id });
+  orders.reverse();
 
   res.render('shop/orders', {
     path: '/orders',
@@ -124,6 +153,7 @@ exports.getOrders = catchAsync(async (req, res, next) => {
 exports.getInvoice = catchAsync(async (req, res, next) => {
   const orderId = req.params.orderId;
   const order = await Order.findById(orderId);
+  const d = new Date(Date.now()).toString().substr(0, 24);
 
   if (!order) {
     return next(new Error('No order found.'));
@@ -142,7 +172,7 @@ exports.getInvoice = catchAsync(async (req, res, next) => {
   );
   pdfDoc.pipe(fs.createWriteStream(invoicePath));
   pdfDoc.pipe(res);
-
+  pdfDoc.fontSize(14).text(d);
   pdfDoc.fontSize(26).text('Invoice', {
     underline: true,
   });

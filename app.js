@@ -1,4 +1,5 @@
 const path = require('path');
+// const fs = require('fs');
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -9,6 +10,9 @@ const flash = require('connect-flash');
 const multer = require('multer');
 const helmet = require('helmet');
 const compression = require('compression');
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
+// const faker = require('faker');
 
 const errorController = require('./controllers/errorController');
 const shopController = require('./controllers/shopController');
@@ -19,6 +23,25 @@ const authRoutes = require('./routes/authRoutes');
 const isAuth = require('./middleware/is-auth');
 
 const app = express();
+
+// const products = [];
+// for (i = 0; i < 301; i++) {
+//   const randomName = faker.commerce.productName();
+//   const randomPrice = faker.commerce.price();
+//   const randomDescription = faker.commerce.color();
+//   const product = {
+//     title: randomName,
+//     price: randomPrice,
+//     description: randomDescription,
+//     userId: '5f3bf81984120408f9f8dd2e',
+//     imageUrl: 'images/2020-08-18T21:18:26.788Z-logo-white.jpg',
+//   };
+//   products.push(product);
+// }
+
+// fs.writeFile(`${__dirname}/products.json`, JSON.stringify(products), (err) => {
+//   console.log(err);
+// });
 
 const store = new MongoDBStore({
   uri: process.env.DATABASE,
@@ -51,12 +74,35 @@ app.set('views', 'views');
 
 // Security headers
 app.use(helmet());
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      frameSrc: ["'self'", 'https://js.stripe.com'],
+      scriptSrc: ["'self'", 'https://js.stripe.com', "'unsafe-inline'"],
+      styleSrc: [
+        "'self'",
+        'https://fonts.googleapis.com',
+
+        'https://stackpath.bootstrapcdn.com/',
+        "'unsafe-inline'",
+      ],
+      fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+      imgSrc: ["'self'", 'data:'],
+    },
+  })
+);
 
 // Compress the response text
 app.use(compression());
 
 // Parse body
 app.use(bodyParser.urlencoded({ extended: false }));
+
+// Data sanitization against NoSQL Query injection
+app.use(mongoSanitize());
+// Data sanitization against XSS
+app.use(xss());
 
 // Save user uploads
 app.use(
@@ -126,6 +172,7 @@ app.use(errorController.get404);
 
 // Global error handler
 app.use((error, req, res, next) => {
+  res.locals.csrfToken = undefined;
   res.status(500).render('500', {
     pageTitle: 'Error!',
     path: '/500',

@@ -88,7 +88,7 @@
             >
             <div class="dropdown-divider"></div>
             <form action="/logout" method="post">
-              <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>">
               <button class="btn" type="submit">Logout</button>
             </form>
           </div>
@@ -151,7 +151,7 @@
     <% } else { %>
     <li class="mobile-nav__item">
       <form action="/logout" method="post">
-        <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
         <button type="submit">Logout</button>
       </form>
     </li>
