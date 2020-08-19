@@ -32,6 +32,37 @@ exports.getProducts = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.getSearch = catchAsync(async (req, res, next) => {
+  const searchParameters = req.body.search.split(' ');
+  const page = +req.query.page || 1;
+  let products = [];
+  for (let i = 0; i < searchParameters.length; i++) {
+    const titleResult = await Product.find({
+      title: { $regex: `${searchParameters[i]}`, $options: 'i' },
+    });
+
+    const descriptionResult = await Product.find({
+      description: { $regex: `${searchParameters[i]}`, $options: 'i' },
+    });
+    products = [
+      ...new Set([...products, ...titleResult, ...descriptionResult]),
+    ];
+  }
+  // products.skip((page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE);
+  const totalItems = products.length;
+  res.render('shop/product-list', {
+    prods: products,
+    pageTitle: 'Products',
+    path: '/products',
+    currentPage: page,
+    hasNextPage: ITEMS_PER_PAGE * page < totalItems,
+    hasPreviousPage: page > 1,
+    nextPage: page + 1,
+    previousPage: page - 1,
+    lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE),
+  });
+});
+
 exports.getProduct = catchAsync(async (req, res, next) => {
   const prodId = req.params.productId;
   const product = await Product.findById(prodId);

@@ -8,15 +8,16 @@
       >Shopper's</a
     >
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <form class="form-inline my-2 my-lg-0 input-group flex-nowrap" style="width: 40rem;">
+      <form class="form-inline my-2 my-lg-0 input-group flex-nowrap" action='/search' method="POST" style="width: 40rem;">
         <input
+          id="search"
           class="form-control"
           type="search"
           placeholder="Find Anything"
-          aria-label="Search"
+          name="search"
         />
-      
-        <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <button id="search-btn" class="btn btn-outline-secondary my-2 my-sm-0" type="submit">
           Search
         </button>
       </form>
