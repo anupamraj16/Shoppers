@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.get('/', shopController.getProducts);
 
-router.post('/search', isAuth, shopController.getSearch);
+router.get('/search', isAuth, shopController.getSearch);
 
 router.get('/products/:productId', shopController.getProduct);
 

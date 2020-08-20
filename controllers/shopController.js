@@ -19,6 +19,7 @@ exports.getProducts = catchAsync(async (req, res, next) => {
   const products = await Product.find()
     .skip((page - 1) * ITEMS_PER_PAGE)
     .limit(ITEMS_PER_PAGE);
+  console.log(products);
   res.render('shop/product-list', {
     prods: products,
     pageTitle: 'Products',
@@ -33,6 +34,7 @@ exports.getProducts = catchAsync(async (req, res, next) => {
 });
 
 exports.getSearch = catchAsync(async (req, res, next) => {
+  const s = req.query;
   const searchParameters = req.body.search.split(' ');
   const page = +req.query.page || 1;
   let products = [];
@@ -60,6 +62,7 @@ exports.getSearch = catchAsync(async (req, res, next) => {
     nextPage: page + 1,
     previousPage: page - 1,
     lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE),
+    searchQuery: searchParameters.join(' '),
   });
 });
 
