@@ -147,8 +147,12 @@ exports.postSignup = catchAsync(async (req, res, next) => {
 });
 
 exports.postLogout = (req, res, next) => {
-  req.session.destroy(() => {
-    res.redirect('/');
+  req.session.destroy((err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.redirect('/');
+    }
   });
 };
 
