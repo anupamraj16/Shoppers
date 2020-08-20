@@ -13,8 +13,7 @@
   "author": "Anupam Raj",
   "license": "ISC",
   "devDependencies": {
-    "nodemon": "^2.0.4",
-    "parcel-bundler": "^1.12.4"
+    "nodemon": "^2.0.4"
   },
   "dependencies": {
     "@babel/polyfill": "^7.10.4",
