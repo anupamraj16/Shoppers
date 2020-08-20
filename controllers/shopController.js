@@ -98,6 +98,7 @@ exports.getCart = catchAsync(async (req, res, next) => {
         process.env.STRIPE_SUCCESS_URL
       }`,
       cancel_url: `${req.protocol}://${req.get('host')}/cart`,
+      customer_email: req.user.email,
       line_items: products.map((p) => {
         return {
           name: p.productId.title,

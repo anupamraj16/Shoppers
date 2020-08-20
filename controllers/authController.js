@@ -190,7 +190,7 @@ exports.postForgotPassword = (req, res, next) => {
       res.redirect('/');
       transporter.sendMail({
         to: req.body.email,
-        from: 'raj.anupam16@gmail.com',
+        from: process.env.EMAIL_FROM,
         subject: 'Password Reset Request',
         html: `
         <p>You requested a password reset</p>
