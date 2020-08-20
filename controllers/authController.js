@@ -70,7 +70,6 @@ exports.postLogin = catchAsync(async (req, res, next) => {
 
   if (doMatch) {
     req.session.isLoggedIn = true;
-    console.log(req.session.isLoggedIn);
     req.session.user = user;
     await req.session.save(() => {
       return res.redirect('/');
@@ -187,11 +186,13 @@ exports.postForgotPassword = (req, res, next) => {
       res.redirect('/');
       transporter.sendMail({
         to: req.body.email,
-        from: 'shop@node-complete.com',
-        subject: 'Password reset',
+        from: 'raj.anupam16@gmail.com',
+        subject: 'Password Reset Request',
         html: `
         <p>You requested a password reset</p>
-        <p>Click this <a href="http://localhost:3000/reset/${token}">link</a> to set a new password.</p>
+        <p>Click this <a href="${req.protocol}://${req.get(
+          'host'
+        )}/resetPassword/${token}">link</a> to set a new password.</p>
       `,
       });
     })
@@ -210,7 +211,7 @@ exports.getResetPassword = catchAsync(async (req, res, next) => {
   } else {
     message = null;
   }
-  res.render('auth/new-password', {
+  res.render('auth/resetPassword', {
     path: '/new-password',
     pageTitle: 'New Password',
     errorMessage: message,

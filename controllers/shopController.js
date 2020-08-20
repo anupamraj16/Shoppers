@@ -19,7 +19,6 @@ exports.getProducts = catchAsync(async (req, res, next) => {
   const products = await Product.find()
     .skip((page - 1) * ITEMS_PER_PAGE)
     .limit(ITEMS_PER_PAGE);
-  console.log(products);
   res.render('shop/product-list', {
     prods: products,
     pageTitle: 'Products',
@@ -34,14 +33,15 @@ exports.getProducts = catchAsync(async (req, res, next) => {
 });
 
 exports.getSearch = catchAsync(async (req, res, next) => {
-  const s = req.query;
-  const searchParameters = req.body.search.split(' ');
+  const searchParameters = req.query.s.split(' ');
   const page = +req.query.page || 1;
   let products = [];
   for (let i = 0; i < searchParameters.length; i++) {
     const titleResult = await Product.find({
       title: { $regex: `${searchParameters[i]}`, $options: 'i' },
     });
+    // .skip((page - 1) * ITEMS_PER_PAGE)
+    // .limit(ITEMS_PER_PAGE);
 
     const descriptionResult = await Product.find({
       description: { $regex: `${searchParameters[i]}`, $options: 'i' },
@@ -52,7 +52,7 @@ exports.getSearch = catchAsync(async (req, res, next) => {
   }
   // products.skip((page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE);
   const totalItems = products.length;
-  res.render('shop/product-list', {
+  res.render('shop/search', {
     prods: products,
     pageTitle: 'Products',
     path: '/products',
@@ -62,7 +62,7 @@ exports.getSearch = catchAsync(async (req, res, next) => {
     nextPage: page + 1,
     previousPage: page - 1,
     lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE),
-    searchQuery: searchParameters.join(' '),
+    searchQuery: searchParameters.join('+'),
   });
 });
 
@@ -94,7 +94,9 @@ exports.getCart = catchAsync(async (req, res, next) => {
   if (items > 0) {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
-      success_url: `${req.protocol}://${req.get('host')}/create-order`,
+      success_url: `${req.protocol}://${req.get('host')}/${
+        process.env.STRIPE_SUCCESS_URL
+      }`,
       cancel_url: `${req.protocol}://${req.get('host')}/cart`,
       line_items: products.map((p) => {
         return {

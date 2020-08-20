@@ -1,0 +1,47 @@
+[
+  {
+    _id: 5f3d7316a085c149ddfe3716,
+    title: 'Small Concrete Chicken',
+    price: 938,
+    description: 'gold',
+    userId: 5f3bf81984120408f9f8dd2e,
+    imageUrl: 'images/2020-08-18T21:18:26.788Z-logo-white.jpg',
+    __v: 0
+  },
+  {
+    _id: 5f3d7316a085c149ddfe3750,
+    title: 'Generic Granite Chicken',
+    price: 603,
+    description: 'olive',
+    userId: 5f3bf81984120408f9f8dd2e,
+    imageUrl: 'images/2020-08-18T21:18:26.788Z-logo-white.jpg',
+    __v: 0
+  },
+  {
+    _id: 5f3d7316a085c149ddfe3753,
+    title: 'Awesome Wooden Chicken',
+    price: 703,
+    description: 'gold',
+    userId: 5f3bf81984120408f9f8dd2e,
+    imageUrl: 'images/2020-08-18T21:18:26.788Z-logo-white.jpg',
+    __v: 0
+  },
+  {
+    _id: 5f3d7316a085c149ddfe3760,
+    title: 'Small Rubber Chicken',
+    price: 671,
+    description: 'fuchsia',
+    userId: 5f3bf81984120408f9f8dd2e,
+    imageUrl: 'images/2020-08-18T21:18:26.788Z-logo-white.jpg',
+    __v: 0
+  },
+  {
+    _id: 5f3d7316a085c149ddfe3767,
+    title: 'Unbranded Frozen Chicken',
+    price: 936,
+    description: 'green',
+    userId: 5f3bf81984120408f9f8dd2e,
+    imageUrl: 'images/2020-08-18T21:18:26.788Z-logo-white.jpg',
+    __v: 0
+  }
+]

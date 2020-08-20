@@ -1,0 +1,83 @@
+[
+  {
+    _id: 5f3d7316a085c149ddfe3674,
+    title: 'Tasty Concrete Chicken',
+    price: 273,
+    description: 'teal',
+    userId: 5f3bf81984120408f9f8dd2e,
+    imageUrl: 'images/2020-08-18T21:18:26.788Z-logo-white.jpg',
+    __v: 0
+  },
+  {
+    _id: 5f3d7316a085c149ddfe3679,
+    title: 'Intelligent Metal Chicken',
+    price: 992,
+    description: 'olive',
+    userId: 5f3bf81984120408f9f8dd2e,
+    imageUrl: 'images/2020-08-18T21:18:26.788Z-logo-white.jpg',
+    __v: 0
+  },
+  {
+    _id: 5f3d7316a085c149ddfe3680,
+    title: 'Unbranded Rubber Chicken',
+    price: 191,
+    description: 'turquoise',
+    userId: 5f3bf81984120408f9f8dd2e,
+    imageUrl: 'images/2020-08-18T21:18:26.788Z-logo-white.jpg',
+    __v: 0
+  },
+  {
+    _id: 5f3d7316a085c149ddfe3687,
+    title: 'Refined Fresh Chicken',
+    price: 593,
+    description: 'magenta',
+    userId: 5f3bf81984120408f9f8dd2e,
+    imageUrl: 'images/2020-08-18T21:18:26.788Z-logo-white.jpg',
+    __v: 0
+  },
+  {
+    _id: 5f3d7316a085c149ddfe3689,
+    title: 'Rustic Plastic Chicken',
+    price: 201,
+    description: 'purple',
+    userId: 5f3bf81984120408f9f8dd2e,
+    imageUrl: 'images/2020-08-18T21:18:26.788Z-logo-white.jpg',
+    __v: 0
+  },
+  {
+    _id: 5f3d7316a085c149ddfe368d,
+    title: 'Ergonomic Concrete Chicken',
+    price: 481,
+    description: 'cyan',
+    userId: 5f3bf81984120408f9f8dd2e,
+    imageUrl: 'images/2020-08-18T21:18:26.788Z-logo-white.jpg',
+    __v: 0
+  },
+  {
+    _id: 5f3d7316a085c149ddfe36fd,
+    title: 'Small Frozen Chicken',
+    price: 52,
+    description: 'violet',
+    userId: 5f3bf81984120408f9f8dd2e,
+    imageUrl: 'images/2020-08-18T21:18:26.788Z-logo-white.jpg',
+    __v: 0
+  },
+  {
+    _id: 5f3d7316a085c149ddfe36fe,
+    title: 'Unbranded Metal Chicken',
+    price: 196,
+    description: 'mint green',
+    userId: 5f3bf81984120408f9f8dd2e,
+    imageUrl: 'images/2020-08-18T21:18:26.788Z-logo-white.jpg',
+    __v: 0
+  },
+  {
+    _id: 5f3d7316a085c149ddfe36ff,
+    title: 'Ergonomic Soft Chicken',
+    price: 720,
+    description: 'purple',
+    userId: 5f3bf81984120408f9f8dd2e,
+    imageUrl: 'images/2020-08-18T21:18:26.788Z-logo-white.jpg',
+    __v: 0
+  }
+]

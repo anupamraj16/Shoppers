@@ -23,7 +23,12 @@ $(document).ready(function () {
   });
 
   // CUSTOM FILE NAME FOR ADD PRODUCT PAGE
-  $('.custom-file-input').on('change', function () {
+  // $('.custom-file-input').on('change', function () {
+  //   console.log('came here');
+  //   var fileName = $(this).val().split('\\').pop();
+  //   $(this).siblings('.custom-file-label').addClass('selected').html(fileName);
+  // });
+  $('#file-label').change(function () {
     var fileName = $(this).val().split('\\').pop();
     $(this).siblings('.custom-file-label').addClass('selected').html(fileName);
   });
