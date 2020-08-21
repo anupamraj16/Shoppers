@@ -129,12 +129,7 @@ form {
   margin: 0;
 }
 
-.card img {
-  height: 10rem;
-  size: center center/cover;
-}
-
-.card__actions {
+/* .card__actions {
   padding: 1rem;
   text-align: center;
 }
@@ -142,7 +137,7 @@ form {
 .card__actions button,
 .card__actions a {
   margin: 0 0.25rem;
-}
+} */
 
 .user-message {
   margin: auto;
@@ -160,26 +155,6 @@ form {
   color: red;
 }
 
-/* .pagination {
-  margin-top: 2rem;
-  text-align: center;
-}
-
-.pagination a {
-  text-decoration: none;
-  color: #00695c;
-  padding: 0.5rem;
-  border: 1px solid #00695c;
-  margin: 0 1rem;
-}
-
-.pagination a:hover,
-.pagination a:active,
-.pagination a.active {
-  background: #00695c;
-  color: white;
-} */
-
 @media (min-width: 768px) {
   .main-header__nav {
     display: flex;
@@ -193,3 +168,59 @@ form {
     width: 30rem;
   }
 }
+#sidebar {
+  width: 20%;
+}
+
+.cart-action.card-body {
+  padding: 0;
+}
+.product.card-body {
+  padding: 5px 0 0 50px;
+  width: 80%;
+}
+.card-body a {
+  color: #555;
+}
+.card-body a:hover {
+  text-decoration: none;
+  color: #ee5a24;
+}
+.product li,
+.cart-items li {
+  border: 0;
+  border-bottom: 1px solid #555;
+}
+ul.product {
+  padding-top: 10px;
+  border-top: 1px solid #555;
+}
+.product-image {
+  height: 200px;
+  width: 20%;
+  overflow: hidden;
+}
+.list-group-item img {
+  size: center center/cover;
+  /* margin-top: 25%; */
+}
+
+/* ---------------------- */
+/* ---ADD PRODUCT FORM--- */
+/* ---------------------- */
+.add-product-form {
+  padding: 30px 20px;
+}
+
+/* ---------------------- */
+/* ---------CART--------- */
+/* ---------------------- */
+#cart-card {
+  padding: 10px;
+}
+ul.cart-items {
+  padding: 0 30px;
+}
+/* #order-card .card-body {
+  margin: 0;
+} */

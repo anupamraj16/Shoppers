@@ -5,7 +5,7 @@ const { validationResult } = require('express-validator/check');
 
 const Product = require('../models/product');
 
-const ITEMS_PER_PAGE = 9;
+const ITEMS_PER_PAGE = 10;
 
 exports.getProducts = catchAsync(async (req, res, next) => {
   const page = +req.query.page || 1;
@@ -13,6 +13,7 @@ exports.getProducts = catchAsync(async (req, res, next) => {
   const numProducts = await Product.find().countDocuments();
   totalItems = numProducts;
   const products = await Product.find({ userId: req.user._id })
+    .sort({ $natural: -1 })
     .skip((page - 1) * ITEMS_PER_PAGE)
     .limit(ITEMS_PER_PAGE);
   // const products = await Product.find({ userId: req.user._id });

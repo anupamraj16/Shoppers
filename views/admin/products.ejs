@@ -5,38 +5,51 @@
         <%- include('../includes/navigation.ejs') %>
 
             <main>
-                <% if (prods.length > 0) { %>
-                    
-                    <div class="grid">
-                        <% for (let product of prods) { %>
-                            <article class="card product-item" style="width: 22rem; margin: 16px 0 16px 0;">
-                                <header class="card__header text-center">
-                                    <h5 class="product__title">
-                                        <%= product.title %>
-                                    </h5>
-                                </header>
-                                <img src="/<%= product.imageUrl %>" class="card-img-top" alt="<%= product.title %>">
-                                <div class="card-body text-center">
-                                    <h6 class="product__price">$
-                                        <%= product.price %>
-                                    </h6>
-                                    <p class="product__description">
-                                        <%= product.description %>
-                                    </p>
-                                    <div class="card__actions">
-                                        <a href="/admin/edit-product/<%= product._id %>?edit=true" class="btn btn-secondary">Edit</a>
-                                        <input type="hidden" value="<%= product._id %>" name="productId">
-                                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                                        <button class="btn btn-light admin-delete" type="button">Delete</button>
-                                    </div>
-                                </div>
-                                
-                            </article>
-                            <% } %>
+                <div class="d-flex flex-row">
+                    <div class="sidebar">
+                        Hello
                     </div>
-                <%- include('../includes/pagination.ejs', {currentPage: currentPage, nextPage: nextPage, previousPage: previousPage, lastPage: lastPage, hasNextPage: hasNextPage, hasPreviousPage: hasPreviousPage}) %>
-                <% } else { %>
+                    <% if (prods.length > 0) { %>
+                        <div class='product-list'>
+                            <ul class="list-group product">
+                                <% for (let product of prods) { %>
+                                    <article>
+                                        <li class="list-group-item">
+                                            <div class="d-flex justify-content-start flex-row">
+                                                <div class="product-image">
+                                                    <a href="/products/<%= product._id %>">
+                                                        <img src="/<%= product.imageUrl %>" class="card-img-top" alt="<%= product.title %>">
+                                                    </a>
+                                                </div>
+                                                <div class="product card-body d-flex flex-column">  
+                                                    <h5 class="d-flex">
+                                                        <a href="/products/<%= product._id %>"><%= product.title %></a>
+                                                    </h5>
+                                                    <h6 class="d-flex">$
+                                                        <%= product.price %>
+                                                    </h6>
+                                                    <p class="text-left">
+                                                        <%= product.description %>
+                                                    </p>
+                                                </div>
+                                                <!-- <div class="card__actions">
+                                                    <a href="/admin/edit-product/<%= product._id %>?edit=true" class="btn btn-secondary">Edit</a>
+                                                    <input type="hidden" value="<%= product._id %>" name="productId">
+                                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                                    <button class="btn btn-light admin-delete" type="button">Delete</button>
+                                                </div> -->
+                                            </div>
+                                        </li>
+                                    </article>
+                                <% } %>
+                            </ul>
+                        </div>
+                    <% } else { %>
                     <h1>No Products Found!</h1>
+                    <% } %>
+                </div>
+                <% if (prods.length > 0) { %>
+                    <%- include('../includes/pagination.ejs', {currentPage: currentPage, nextPage: nextPage, previousPage: previousPage, lastPage: lastPage, hasNextPage: hasNextPage, hasPreviousPage: hasPreviousPage}) %>
                 <% } %>
             </main>
         <%- include('../includes/end.ejs') %>

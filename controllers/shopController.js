@@ -9,7 +9,7 @@ const Order = require('../models/order');
 
 const catchAsync = require('../utils/catchAsync');
 
-const ITEMS_PER_PAGE = 9;
+const ITEMS_PER_PAGE = 10;
 
 exports.getProducts = catchAsync(async (req, res, next) => {
   const page = +req.query.page || 1;
@@ -17,6 +17,7 @@ exports.getProducts = catchAsync(async (req, res, next) => {
   const numProducts = await Product.find().countDocuments();
   totalItems = numProducts;
   const products = await Product.find()
+    .sort({ $natural: -1 })
     .skip((page - 1) * ITEMS_PER_PAGE)
     .limit(ITEMS_PER_PAGE);
   res.render('shop/product-list', {
@@ -52,7 +53,7 @@ exports.getSearch = catchAsync(async (req, res, next) => {
   }
   // products.skip((page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE);
   const totalItems = products.length;
-  res.render('shop/search', {
+  res.render('shop/product-list', {
     prods: products,
     pageTitle: 'Products',
     path: '/products',
@@ -62,7 +63,7 @@ exports.getSearch = catchAsync(async (req, res, next) => {
     nextPage: page + 1,
     previousPage: page - 1,
     lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE),
-    searchQuery: searchParameters.join('+'),
+    // searchQuery: searchParameters.join('+'),
   });
 });
 
