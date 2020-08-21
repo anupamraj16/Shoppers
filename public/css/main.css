@@ -255,3 +255,73 @@ ul.cart-items {
 /* #order-card .card-body {
   margin: 0;
 } */
+
+/* ---------------------- */
+/* ------PAGINATION------ */
+/* ---------------------- */
+.pagination > li > a {
+  background-color: white;
+  color: #2c3e50;
+}
+
+.pagination > li > a:focus,
+.pagination > li > a:hover {
+  color: #5a5a5a;
+  background-color: #eee;
+  border-color: #ddd;
+}
+
+.pagination > .active > a {
+  color: white;
+  background-color: #2c3e50 !important;
+  border: solid 1px #2c3e50 !important;
+}
+
+.pagination > .active > a:hover {
+  background-color: #2c3e50 !important;
+  border: solid 1px #2c3e50;
+}
+
+/* ---------------------- */
+/* --------FOOTER-------- */
+/* ---------------------- */
+.back-to-top {
+  background: #555;
+}
+.back-to-top-text {
+  color: #ebebeb;
+  padding: 10px;
+}
+.back-to-top-text:hover {
+  color: #fff;
+  text-decoration: none;
+}
+footer {
+  background: #2c3e50;
+  overflow: hidden;
+}
+
+.footer__logo {
+  height: 30px;
+  width: 50px;
+}
+footer ul {
+  list-style: none;
+  padding: 20px 10px 0 10px;
+  margin-bottom: none !important;
+}
+footer ul li a {
+  text-decoration: 0;
+  color: #b3b3b3;
+}
+footer ul li a:hover {
+  color: #dadada;
+  text-decoration: none;
+}
+.footer__copyright a {
+  color: #707070;
+}
+.footer__copyright a:hover {
+  color: #8b8b8b;
+  text-decoration: none;
+}
