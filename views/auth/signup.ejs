@@ -9,8 +9,8 @@
         <% if (errorMessage) { %>
             <div class="user-message user-message--error"><%= errorMessage %></div>
         <% } %>
-        <div class="card container" style="width: 30rem;">
-            <img src="/img/logo-white.jpg" class="card-img-top" alt="Image Here">
+        <div class="card container auth-form">
+            <img src="/images/2020-08-18T21:18:26.788Z-logo-white.jpg" class="card-img-top" alt="Image">
             <div class="card-body">
                 <form class="login-form" action="/signup" method="POST" novalidate>
                     <div class="form-group">
@@ -20,7 +20,7 @@
                                 <span class="input-group-text">@</span>
                               </div>
                             <input 
-                                class="form-control form-control-lg <%= validationErrors.find(e => e.param === 'email') ? 'invalid' : '' %>"
+                                class="form-control <%= validationErrors.find(e => e.param === 'email') ? 'invalid' : '' %>"
                                 type="email" 
                                 name="email" 
                                 id="email"
@@ -36,7 +36,7 @@
                                 <span class="input-group-text">&#8226</span>
                             </div>
                             <input 
-                                class="form-control form-control-lg <%= validationErrors.find(e => e.param === 'password') ? 'invalid' : '' %>"
+                                class="form-control <%= validationErrors.find(e => e.param === 'password') ? 'invalid' : '' %>"
                                 type="password" 
                                 name="password" 
                                 id="password" 
@@ -51,7 +51,7 @@
                                 <span class="input-group-text">&#8226</span>
                             </div>
                     <input 
-                                class="form-control form-control-lg <%= validationErrors.find(e => e.param === 'confirmPassword') ? 'invalid' : '' %>"
+                                class="form-control <%= validationErrors.find(e => e.param === 'confirmPassword') ? 'invalid' : '' %>"
                                 type="password" 
                                 name="confirmPassword" 
                                 id="confirmPassword" 
@@ -61,7 +61,7 @@
                         
                         </div>
                     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                    <button class="btn btn-primary btn-lg" type="submit">Signup</button>
+                    <button class="btn btn-outline-secondary" type="submit">Signup</button>
                  
                 </form>
             </div>

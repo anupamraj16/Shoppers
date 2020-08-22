@@ -33,6 +33,9 @@ main {
 a:hover {
   text-decoration: none;
 }
+.form-control:focus {
+  border: 0;
+}
 .user-message {
   margin: auto;
   width: 90%;
@@ -66,9 +69,34 @@ a:hover {
 /* --------FORM-------- */
 /* ---------------------- */
 .input-group-text {
-  width: 3rem;
+  width: 2rem;
 }
-
+.auth-form {
+  width: 20rem;
+  padding-top: 20px;
+}
+.auth-form h5 {
+  text-align: center;
+  padding-bottom: 5px;
+}
+.auth-form img {
+  width: 100px;
+  height: auto;
+  border-radius: 10px;
+}
+.auth-form .card-body {
+  padding-top: 10px;
+}
+.auth-form a {
+  color: #555;
+  align-self: center;
+}
+.auth-form img {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-bottom: 5px;
+  /* border-radius: 25px; */
+}
 /* ---------------------- */
 /* --------NAVBAR-------- */
 /* ---------------------- */
