@@ -130,6 +130,7 @@ app.use(flash());
 
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.session.isLoggedIn;
+
   next();
 });
 
@@ -144,6 +145,7 @@ app.use((req, res, next) => {
         return next();
       }
       req.user = user;
+      res.locals.cartItemCount = req.user.cart.count;
       next();
     })
     .catch((err) => {

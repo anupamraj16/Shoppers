@@ -6,9 +6,7 @@
 
             <main>
                 <div class="d-flex flex-row">
-                    <div class="sidebar">
-                        Hello
-                    </div>
+                    <%- include('../includes/sidebar.ejs') %>
                     <% if (prods.length > 0) { %>
                         <div class='product-list'>
                             <ul class="list-group product">
@@ -31,13 +29,13 @@
                                                     <p class="text-left">
                                                         <%= product.description %>
                                                     </p>
+                                                    <div class="card__actions d-flex flex-row">
+                                                        <a href="/admin/edit-product/<%= product._id %>?edit=true" class="btn btn-secondary">Edit</a>
+                                                        <input type="hidden" value="<%= product._id %>" name="productId">
+                                                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                                        <button class="btn btn-outline-danger admin-delete" type="button">Delete</button>
+                                                    </div>
                                                 </div>
-                                                <!-- <div class="card__actions">
-                                                    <a href="/admin/edit-product/<%= product._id %>?edit=true" class="btn btn-secondary">Edit</a>
-                                                    <input type="hidden" value="<%= product._id %>" name="productId">
-                                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                                                    <button class="btn btn-light admin-delete" type="button">Delete</button>
-                                                </div> -->
                                             </div>
                                         </li>
                                     </article>

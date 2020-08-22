@@ -11,26 +11,29 @@
                         <div class='product-list'>
                             <ul class="list-group product">
                                 <% for (let product of prods) { %>
-                                    <li class="list-group-item">
-                                        <div class="d-flex justify-content-start flex-row">
-                                            <div class="product-image">
-                                                <a href="/products/<%= product._id %>">
-                                                    <img src="/<%= product.imageUrl %>" class="card-img-top" alt="<%= product.title %>">
-                                                </a>
+                                    <article>
+                                        <li class="list-group-item">
+                                            <div class="d-flex justify-content-start flex-row">
+                                                <div class="product-image">
+                                                    <a href="/products/<%= product._id %>">
+                                                        <img src="/<%= product.imageUrl %>" class="card-img-top" alt="<%= product.title %>">
+                                                    </a>
+                                                </div>
+                                                <div class="product card-body d-flex flex-column">  
+                                                    <h5 class="d-flex">
+                                                        <a href="/products/<%= product._id %>"><%= product.title %></a>
+                                                    </h5>
+                                                    <h6 class="d-flex">$
+                                                        <%= product.price %>
+                                                    </h6>
+                                                    <p class="text-left">
+                                                        <%= product.description %>
+                                                    </p>
+                                                    <%- include('../includes/add-to-cart.ejs', {product: product}) %>
+                                                </div>
                                             </div>
-                                            <div class="product card-body d-flex flex-column">  
-                                                <h5 class="d-flex">
-                                                    <a href="/products/<%= product._id %>"><%= product.title %></a>
-                                                </h5>
-                                                <h6 class="d-flex">$
-                                                    <%= product.price %>
-                                                </h6>
-                                                <p class="text-left">
-                                                    <%= product.description %>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </li>
+                                        </li>
+                                    </article>
                                 <% } %>
                             </ul>
                         </div>

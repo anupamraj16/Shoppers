@@ -4,15 +4,15 @@
     <body>
         <%- include('../includes/navigation.ejs') %>
         <main>
-            <% if (products.length > 0) { %>
-                <div class="d-flex flex-row">
-                    <div class="d-flex flex-column" style="width: 70%;">
-                        <ul class="cart-items">
+            <div class="d-flex flex-row">
+                <div class="d-flex flex-column" style="width: 70%;">
+                    <ul class="cart-items">
+                        <% if (products.length > 0) { %>
                             <% products.forEach(p => { %>
                                 <li class="list-group-item d-flex flex-row">
-                                    <h4 style="width: 50%;">
-                                        <%= p.productId.title %>
-                                    </h4>
+                                    <h5 style="width: 50%;">
+                                        <a href="/products/<%= p.productId._id %>" target="_blank"><%= p.productId.title %></a>
+                                    </h5>
                                     <div class="cart-action card-body text-right" style="width: 50%;">
                                         <p class="card-text">Quantity: <%= p.quantity %></p>
                                         <p class="card-text">$ <%= p.productId.price %></p>
@@ -24,16 +24,23 @@
                                     </div>
                                 </li>
                             <% }) %>
-                        </ul>
-                    </div>
+                        <% } else { %>
+                            <li class="list-group-item d-flex flex-row">
+                                <h5 style="width: 50%;">
+                                    No Product In Cart
+                                </h5>
+                            </li>
+                        <% } %>
+                    </ul>
+                </div>
+                <% if (products.length > 0) { %>
                     <div id='order-card' class="d-flex flex-column" style="width: 30%;">
                         <div class="list-group-item text-center">
                             <div class="card-body">
                                 <p>Subtotal (total <%= items %> <%= items === 1 ? 'item':'items' %>) $ <%= totalSum %></p>
                                 <hr>
-                                
                                 <button id='order-btn' class="btn btn-secondary" type="submit">Place Order</button>
-                                
+                                <a class="nav-link btn" href="https://stripe.com/docs/testing#cards" target="_blank">Test Cards</a>
                                 <script>
                                     var stripe = Stripe('pk_test_51HBkokBiPV2ZWFlqOVQ8Llkx050VloklkRkieBSWqhL8d7tUzO6eTQsEUaLNcGhETghbg2WbxleHBQRd9MNIsV6K00HLaQrc0C');
                                     var orderBtn = document.getElementById('order-btn');
@@ -44,12 +51,11 @@
                                     });
                                 </script>
                             </div>
-                            <a class="nav-link btn" href="https://stripe.com/docs/testing#cards" target="_blank">Test Cards</a>
                         </div>
                     </div>
-                </div>
-            <% } else { %>
-                <h1>No Products in Cart!</h1>
-            <% } %>
+                <% } else { %>
+                                
+                <% } %>
+            </div>
         </main>
         <%- include('../includes/end.ejs') %>

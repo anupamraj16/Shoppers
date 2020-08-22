@@ -27,4 +27,17 @@ $(document).ready(function () {
     var fileName = $(this).val().split('\\').pop();
     $(this).siblings('.custom-file-label').addClass('selected').html(fileName);
   });
+
+  $('.add-to-cart').click(function () {
+    const prodId = $(this).siblings('[name=productId]')[0].value;
+    const csrf = $(this).siblings('[name=_csrf]')[0].value;
+    fetch('/cart/' + prodId, {
+      method: 'POST',
+      headers: {
+        'csrf-token': csrf,
+      },
+    }).then((data) => {
+      window.location.assign(data.url);
+    });
+  });
 });

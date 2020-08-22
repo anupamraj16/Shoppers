@@ -8,6 +8,7 @@ const Product = require('../models/product');
 const Order = require('../models/order');
 
 const catchAsync = require('../utils/catchAsync');
+const user = require('../models/user');
 
 const ITEMS_PER_PAGE = 10;
 
@@ -131,15 +132,25 @@ exports.getCart = catchAsync(async (req, res, next) => {
 });
 
 exports.postCart = catchAsync(async (req, res, next) => {
-  const prodId = req.body.productId;
+  const prodId = req.params.prodId;
   const product = await Product.findById(prodId);
+
   await req.user.addToCart(product);
+  let i = 0;
+  let items = 0;
+  for (i = 0; i < req.user.cart.items.length; i++) {
+    items += req.user.cart.items[i].quantity;
+  }
+  req.user.cart.count = items;
+  await req.user.save();
   res.redirect('/');
 });
 
 exports.postCartDeleteProduct = catchAsync(async (req, res, next) => {
   const prodId = req.body.productId;
   await req.user.removeFromCart(prodId);
+  await req.user.cart.count--;
+  await req.user.save();
   res.redirect('/cart');
 });
 

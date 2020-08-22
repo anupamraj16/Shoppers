@@ -22,6 +22,10 @@ const userSchema = new mongoose.Schema({
         quantity: { type: Number, required: true },
       },
     ],
+    count: {
+      type: Number,
+      default: 0,
+    },
   },
 });
 
@@ -41,6 +45,7 @@ userSchema.methods.addToCart = function (product) {
       quantity: newQuantity,
     });
   }
+
   const updatedCart = {
     items: updatedCartItems,
   };

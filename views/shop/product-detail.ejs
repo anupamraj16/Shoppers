@@ -5,31 +5,30 @@
         <%- include('../includes/navigation.ejs') %>
         <main>
             <div class="d-flex flex-row">
-                <div id="sidebar">
-                    Hello
-                </div>
+                <%- include('../includes/sidebar.ejs') %>
                 <div class="card product-item">
-                    <li class="list-group-item">
-                        <div class="d-flex justify-content-start flex-row">
-                            <div class="product-image">
-                                <img src="/<%= product.imageUrl %>" class="card-img-top" alt="<%= product.title %>">
+                    <article>
+                        <li class="list-group-item">
+                            <div class="d-flex justify-content-start flex-row">
+                                <div class="product-image">
+                                    <img src="/<%= product.imageUrl %>" class="card-img-top" alt="<%= product.title %>">
+                                </div>
+                                <div class="product card-body d-flex flex-column">  
+                                    <h5 class="d-flex">
+                                        <%= product.title %>
+                                    </h5>
+                                    <h6 class="d-flex">$
+                                        <%= product.price %>
+                                    </h6>
+                                    <p class="text-left">
+                                        <%= product.description %>
+                                    </p>
+                                    <%- include('../includes/add-to-cart.ejs', {product: product}) %>
+                                </div>
+                                
                             </div>
-                            <div class="product card-body d-flex flex-column">  
-                                <h5 class="d-flex">
-                                    <%= product.title %>
-                                </h5>
-                                <h6 class="d-flex">$
-                                    <%= product.price %>
-                                </h6>
-                                <p class="text-left">
-                                    <%= product.description %>
-                                </p>
-                            </div>
-                            <% if (isAuthenticated) { %>
-                                <%- include('../includes/add-to-cart.ejs', {product: product}) %>
-                            <% } %>
-                        </div>
-                    </li>
+                        </li>
+                    </article>
                 </div>
             </div>
         </main>
