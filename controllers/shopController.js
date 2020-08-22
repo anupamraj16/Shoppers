@@ -6,9 +6,10 @@ const stripe = require('stripe')(process.env.STRIPE_KEY);
 
 const Product = require('../models/product');
 const Order = require('../models/order');
+const User = require('../models/user');
 
 const catchAsync = require('../utils/catchAsync');
-const user = require('../models/user');
+const { POINT_CONVERSION_UNCOMPRESSED } = require('constants');
 
 const ITEMS_PER_PAGE = 10;
 
@@ -83,17 +84,10 @@ exports.getProduct = catchAsync(async (req, res, next) => {
 
 exports.getCart = catchAsync(async (req, res, next) => {
   await req.user.populate('cart.items.productId').execPopulate();
-  const products = req.user.cart.items;
   let total = 0;
-  let items = 0;
-  products.forEach((p) => {
-    total += p.quantity * p.productId.price;
-  });
-  products.forEach((p) => {
-    items += p.quantity;
-  });
+  const products = req.user.cart.items;
 
-  if (items > 0) {
+  if (req.user.cart.count > 0) {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       success_url: `${req.protocol}://${req.get('host')}/${
@@ -112,12 +106,16 @@ exports.getCart = catchAsync(async (req, res, next) => {
       }),
     });
 
+    products.forEach((p) => {
+      total += Math.round(p.quantity * p.productId.price * 100);
+    });
+    total /= 100;
+
     return res.render('shop/cart', {
       path: '/cart',
       pageTitle: 'Your Cart',
       products: products,
       totalSum: total,
-      items,
       sessionId: session.id,
     });
   }
@@ -125,9 +123,6 @@ exports.getCart = catchAsync(async (req, res, next) => {
   res.render('shop/cart', {
     path: '/cart',
     pageTitle: 'Your Cart',
-    products: products,
-    totalSum: total,
-    items,
   });
 });
 
@@ -147,10 +142,10 @@ exports.postCart = catchAsync(async (req, res, next) => {
 });
 
 exports.postCartDeleteProduct = catchAsync(async (req, res, next) => {
+  const quantity = req.body.quantity;
   const prodId = req.body.productId;
-  await req.user.removeFromCart(prodId);
-  await req.user.cart.count--;
-  await req.user.save();
+  await req.user.removeFromCart(prodId, quantity);
+  // console.log(req.user.cart.items[0].productId._id);
   res.redirect('/cart');
 });
 

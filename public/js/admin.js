@@ -28,6 +28,22 @@ $(document).ready(function () {
     $(this).siblings('.custom-file-label').addClass('selected').html(fileName);
   });
 
+  function readURL(input) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+
+      reader.onload = function (e) {
+        $('#img-upload').attr('src', e.target.result);
+      };
+
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  $('#image').change(function () {
+    readURL(this);
+  });
+
   $('.add-to-cart').click(function () {
     const prodId = $(this).siblings('[name=productId]')[0].value;
     const csrf = $(this).siblings('[name=_csrf]')[0].value;

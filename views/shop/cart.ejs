@@ -1,24 +1,29 @@
 <%- include('../includes/head.ejs') %>
     </head>
-
     <body>
         <%- include('../includes/navigation.ejs') %>
         <main>
             <div class="d-flex flex-row">
                 <div class="d-flex flex-column" style="width: 70%;">
                     <ul class="cart-items">
-                        <% if (products.length > 0) { %>
+                        <% if (cartItemCount > 0) { %>
                             <% products.forEach(p => { %>
                                 <li class="list-group-item d-flex flex-row">
-                                    <h5 style="width: 50%;">
+                                    <div class="cart-product-image">
+                                        <a href="/products/<%= p.productId._id %>" target="_blank">
+                                            <img src="/<%= p.productId.imageUrl %>" class="card-img-top" alt="<%= p.productId.title %>">
+                                        </a>
+                                    </div>
+                                    <h5 class="cart-header">
                                         <a href="/products/<%= p.productId._id %>" target="_blank"><%= p.productId.title %></a>
                                     </h5>
-                                    <div class="cart-action card-body text-right" style="width: 50%;">
+                                    <div class="cart-action card-body text-right">
                                         <p class="card-text">Quantity: <%= p.quantity %></p>
                                         <p class="card-text">$ <%= p.productId.price %></p>
                                         <form action="/cart-delete-item" method="POST">
                                             <input type="hidden" value="<%= p.productId._id %>" name="productId">
                                             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                            <input type="hidden" name="quantity" value="<%= p.quantity %>">
                                             <button class="btn btn-outline-danger btn-sm" type="submit">Delete</button>
                                         </form>
                                     </div>
@@ -26,18 +31,18 @@
                             <% }) %>
                         <% } else { %>
                             <li class="list-group-item d-flex flex-row">
-                                <h5 style="width: 50%;">
+                                <h5>
                                     No Product In Cart
                                 </h5>
                             </li>
                         <% } %>
                     </ul>
                 </div>
-                <% if (products.length > 0) { %>
+                <% if (cartItemCount > 0) { %>
                     <div id='order-card' class="d-flex flex-column" style="width: 30%;">
                         <div class="list-group-item text-center">
                             <div class="card-body">
-                                <p>Subtotal (total <%= items %> <%= items === 1 ? 'item':'items' %>) $ <%= totalSum %></p>
+                                <p>Subtotal (total <%= cartItemCount %> <%= cartItemCount === 1 ? 'item':'items' %>) $ <%= totalSum %></p>
                                 <hr>
                                 <button id='order-btn' class="btn btn-secondary" type="submit">Place Order</button>
                                 <a class="nav-link btn" href="https://stripe.com/docs/testing#cards" target="_blank">Test Cards</a>

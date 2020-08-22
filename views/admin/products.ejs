@@ -15,13 +15,13 @@
                                         <li class="list-group-item">
                                             <div class="d-flex justify-content-start flex-row">
                                                 <div class="product-image">
-                                                    <a href="/products/<%= product._id %>">
+                                                    <a href="/admin/edit-product/<%= product._id %>?edit=true">
                                                         <img src="/<%= product.imageUrl %>" class="card-img-top" alt="<%= product.title %>">
                                                     </a>
                                                 </div>
                                                 <div class="product card-body d-flex flex-column">  
                                                     <h5 class="d-flex">
-                                                        <a href="/products/<%= product._id %>"><%= product.title %></a>
+                                                        <a href="/admin/edit-product/<%= product._id %>?edit=true"><%= product.title %></a>
                                                     </h5>
                                                     <h6 class="d-flex">$
                                                         <%= product.price %>
