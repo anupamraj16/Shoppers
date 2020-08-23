@@ -153,6 +153,7 @@ exports.postCartDeleteProduct = catchAsync(async (req, res, next) => {
 });
 
 exports.webhookCheckout = (req, res, next) => {
+  console.log('I AM IN WEBHOOKCHECKOUT');
   const signature = req.headers['stripe-signature'];
   let event;
   try {
@@ -161,6 +162,7 @@ exports.webhookCheckout = (req, res, next) => {
       signature,
       process.env.STRIPE_WEBHOOK_SECRET
     );
+    console.log(event);
   } catch (err) {
     return res.status(400).send(`Webhook error: ${err.message}`);
   }
@@ -176,16 +178,13 @@ const postOrder = catchAsync(async (session) => {
 
   let totalSum = 0;
   const user = await User.findOne({ email: session.customer_email });
-  console.log(user);
   await user.populate('cart.items.productId').execPopulate();
-  console.log('Populated User: ', user);
   user.cart.items.forEach((p) => {
     totalSum += p.quantity * p.productId.price;
   });
   const products = user.cart.items.map((i) => {
     return { quantity: i.quantity, product: { ...i.productId._doc } };
   });
-  console.log(products);
   const order = new Order({
     user: {
       email: req.user.email,
@@ -193,8 +192,6 @@ const postOrder = catchAsync(async (session) => {
     },
     products: products,
   });
-
-  console.log(order);
 
   await order.save();
   // const charge = await stripe.charges.create({
