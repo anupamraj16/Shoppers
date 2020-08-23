@@ -175,7 +175,7 @@ const postOrder = catchAsync(async (session) => {
   // const token = req.body.stripeToken; // Using Express
 
   let totalSum = 0;
-  const user = (await User.findOne({ email: session.customer_email })).id;
+  const user = await User.findOne({ email: session.customer_email });
   console.log(user);
   await user.populate('cart.items.productId').execPopulate();
   console.log('Populated User: ', user);
