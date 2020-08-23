@@ -20,12 +20,6 @@ router.post('/cart/:prodId', isAuth, shopController.postCart);
 
 router.post('/cart-delete-item', isAuth, shopController.postCartDeleteProduct);
 
-router.get(
-  `/${process.env.STRIPE_SUCCESS_URL}`,
-  isAuth,
-  shopController.postOrder
-);
-
 router.get('/orders', isAuth, shopController.getOrders);
 
 router.get('/orders/:orderId', isAuth, shopController.getInvoice);

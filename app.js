@@ -93,6 +93,12 @@ app.use(
   })
 );
 
+app.post(
+  '/webhook-checkout',
+  bodyParser.raw({ type: 'application/json' }),
+  shopController.webhookCheckout
+);
+
 // Compress the response text
 app.use(compression());
 
@@ -152,8 +158,6 @@ app.use((req, res, next) => {
       next(new Error(err));
     });
 });
-
-app.post('/create-order', isAuth, shopController.postOrder);
 
 app.use(csrf());
 

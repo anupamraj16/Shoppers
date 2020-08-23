@@ -149,10 +149,27 @@ exports.postCartDeleteProduct = catchAsync(async (req, res, next) => {
   res.redirect('/cart');
 });
 
-exports.postOrder = catchAsync(async (req, res, next) => {
+exports.webhookCheckout = (req, res, next) => {
+  const signature = req.headers['stripe-signature'];
+  let event;
+  try {
+    event = stripe.webhooks.constructEvent(
+      req.body,
+      signature,
+      process.env.STRIPE_WEBHOOK_SECRET
+    );
+  } catch (err) {
+    return res.status(400).send(`Webhook error: ${err.message}`);
+  }
+
+  if (event.type === 'checkout.session.completed') postOrder(event.data.object);
+  res.status(200).json({ received: true });
+};
+
+const postOrder = catchAsync(async (session) => {
   // Token is created using Checkout or Elements!
   // Get the payment token ID submitted by the form:
-  const token = req.body.stripeToken; // Using Express
+  // const token = req.body.stripeToken; // Using Express
 
   let totalSum = 0;
   const user = await req.user.populate('cart.items.productId').execPopulate();
