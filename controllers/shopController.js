@@ -185,13 +185,15 @@ const postOrder = catchAsync(async (session) => {
   const products = user.cart.items.map((i) => {
     return { quantity: i.quantity, product: { ...i.productId._doc } };
   });
+  console.log(user);
   const order = new Order({
     user: {
-      email: req.user.email,
-      userId: req.user,
+      email: user.email,
+      userId: user._id,
     },
     products: products,
   });
+  console.log(order);
 
   await order.save();
   // const charge = await stripe.charges.create({
