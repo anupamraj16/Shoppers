@@ -90,14 +90,17 @@ exports.getCart = catchAsync(async (req, res, next) => {
   if (req.user.cart.count > 0) {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
-      success_url: `${req.protocol}://${req.get('host')}/${
-        process.env.STRIPE_SUCCESS_URL
-      }`,
+      success_url: `${req.protocol}://${req.get('host')}/orders`,
       cancel_url: `${req.protocol}://${req.get('host')}/cart`,
       customer_email: req.user.email,
       line_items: products.map((p) => {
         return {
           name: p.productId.title,
+          // images: [
+          //   `${req.protocol}://${req.get('host')}/images/${
+          //     p.productId.imageUrl
+          //   }`,
+          // ],
           description: p.productId.description,
           amount: p.productId.price * 100,
           currency: 'usd',
@@ -172,7 +175,8 @@ const postOrder = catchAsync(async (session) => {
   // const token = req.body.stripeToken; // Using Express
 
   let totalSum = 0;
-  const user = await req.user.populate('cart.items.productId').execPopulate();
+  const user = (await User.findOne({ email: session.customer_email })).id;
+  await user.populate('cart.items.productId').execPopulate();
   user.cart.items.forEach((p) => {
     totalSum += p.quantity * p.productId.price;
   });
