@@ -3,6 +3,8 @@ const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const sendgridTransport = require('nodemailer-sendgrid-transport');
+
+// TODO: check validationResult
 const { validationResult } = require('express-validator/check');
 
 const User = require('../models/user');
@@ -17,6 +19,7 @@ const transporter = nodemailer.createTransport(
 );
 
 exports.getLogin = (req, res, next) => {
+  // TODO: get added product to cart
   let message = req.flash('error');
   if (message.length > 0) {
     message = message[0];
@@ -24,7 +27,6 @@ exports.getLogin = (req, res, next) => {
     message = null;
   }
   res.render('auth/login', {
-    path: '/login',
     pageTitle: 'Login',
     errorMessage: message,
     oldInput: {
@@ -41,8 +43,8 @@ exports.postLogin = catchAsync(async (req, res, next) => {
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
+    // FIXME: fix status code in 4 places
     return res.status(422).render('auth/login', {
-      path: '/login',
       pageTitle: 'Login',
       errorMessage: errors.array()[0].msg,
       oldInput: {
@@ -56,7 +58,6 @@ exports.postLogin = catchAsync(async (req, res, next) => {
   const user = await User.findOne({ email });
   if (!user) {
     return res.status(422).render('auth/login', {
-      path: '/login',
       pageTitle: 'Login',
       errorMessage: 'Invalid email or password.',
       oldInput: {
@@ -76,7 +77,6 @@ exports.postLogin = catchAsync(async (req, res, next) => {
     });
   } else {
     res.status(422).render('auth/login', {
-      path: '/login',
       pageTitle: 'Login',
       errorMessage: 'Invalid email or password.',
       oldInput: {
@@ -96,7 +96,6 @@ exports.getSignup = (req, res, next) => {
     message = null;
   }
   res.render('auth/signup', {
-    path: '/signup',
     pageTitle: 'Signup',
     errorMessage: message,
     oldInput: {
@@ -109,6 +108,7 @@ exports.getSignup = (req, res, next) => {
 };
 
 exports.postSignup = catchAsync(async (req, res, next) => {
+  const name = req.body.name;
   const email = req.body.email;
   const password = req.body.password;
 
@@ -116,12 +116,13 @@ exports.postSignup = catchAsync(async (req, res, next) => {
   if (!errors.isEmpty()) {
     console.log(errors.array());
     return res.status(422).render('auth/signup', {
-      path: '/signup',
       pageTitle: 'Signup',
       errorMessage: errors.array()[0].msg,
       oldInput: {
+        name: name,
         email: email,
         password: password,
+        // FIXME: match passwords
         confirmPassword: req.body.confirmPassword,
       },
       validationErrors: errors.array(),
@@ -131,19 +132,20 @@ exports.postSignup = catchAsync(async (req, res, next) => {
   const hashedPassword = await bcrypt.hash(password, 12);
 
   const user = new User({
+    name: name,
     email: email,
     password: hashedPassword,
     cart: { items: [] },
   });
   await user.save();
+  transporter.sendMail({
+    to: email,
+    from: process.env.EMAIL_FROM,
+    subject: 'Signup succeeded!',
+    html: '<h1>You successfully signed up!</h1>',
+  });
 
   res.redirect('/login');
-  // return transporter.sendMail({
-  //   to: email,
-  //   from: 'shop@node-complete.com',
-  //   subject: 'Signup succeeded!',
-  //   html: '<h1>You successfully signed up!</h1>'
-  // });
 });
 
 exports.postLogout = (req, res, next) => {
@@ -164,7 +166,6 @@ exports.getForgotPassword = (req, res, next) => {
     message = null;
   }
   res.render('auth/forgotPassword', {
-    path: '/reset',
     pageTitle: 'Forgot Password?',
     errorMessage: message,
   });
@@ -216,7 +217,6 @@ exports.getResetPassword = catchAsync(async (req, res, next) => {
     message = null;
   }
   res.render('auth/resetPassword', {
-    path: '/new-password',
     pageTitle: 'New Password',
     errorMessage: message,
     userId: user._id.toString(),
@@ -225,6 +225,7 @@ exports.getResetPassword = catchAsync(async (req, res, next) => {
 });
 
 exports.postResetPassword = catchAsync(async (req, res, next) => {
+  // FIXME: validate if 2 passwords are same
   const newPassword = req.body.password;
   const userId = req.body.userId;
   const passwordToken = req.body.passwordToken;
@@ -235,6 +236,7 @@ exports.postResetPassword = catchAsync(async (req, res, next) => {
     resetTokenExpiration: { $gt: Date.now() },
     _id: userId,
   });
+  // TODO: Handle situations where token is expired etc
   resetUser = user;
   const hashedPassword = await bcrypt.hash(newPassword, 12);
 

@@ -33,23 +33,11 @@ main {
 a:hover {
   text-decoration: none;
 }
+#navbar a.active {
+  color: orange;
+}
 .form-control:focus {
   border: 0;
-}
-.user-message {
-  margin: auto;
-  width: 90%;
-  border: 1px solid #4771fa;
-  padding: 0.5rem;
-  border-radius: 3px;
-  background: #b9c9ff;
-  text-align: center;
-}
-
-.user-message--error {
-  border-color: red;
-  background: rgb(255, 176, 176);
-  color: red;
 }
 
 @media (min-width: 768px) {
@@ -60,11 +48,16 @@ a:hover {
   #side-menu-toggle {
     display: none;
   }
-
-  .user-message {
-    width: 30rem;
-  }
 }
+/* ---------------------- */
+/* -------USER-MSSG------ */
+/* ---------------------- */
+.alert {
+  /* width: 20rem; */
+  /* margin: 0 25% 0 25%; */
+  text-align: center;
+}
+
 /* ---------------------- */
 /* --------FORM-------- */
 /* ---------------------- */
@@ -212,6 +205,15 @@ ul.product {
 }
 #title {
   height: 6rem;
+}
+/* ---------------------- */
+/* --------ORDERS-------- */
+/* ---------------------- */
+.order-list {
+  width: 80%;
+}
+.order-list li {
+  border: 0;
 }
 /* ---------------------- */
 /* ---------CART--------- */

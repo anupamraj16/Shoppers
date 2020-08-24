@@ -6,15 +6,28 @@
    <%- include('../includes/navigation.ejs') %>
 
     <main>
-        <% if (errorMessage) { %>
-            <div class="user-message user-message--error"><%= errorMessage %></div>
-        <% } %>
         <div class="card container auth-form">
             <img src="/images/2020-08-18T21:18:26.788Z-logo-white.jpg" class="card-img-top" alt="Image">
             <div class="card-body">
+                <% if (errorMessage) { %>
+                    <div class="alert alert-danger"><%= errorMessage %></div>
+                <% } %>
                 <form class="login-form" action="/signup" method="POST" novalidate>
                     <div class="form-group">
-        
+                        <div class="input-group flex-nowrap">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">#</span>
+                              </div>
+                            <input 
+                                class="form-control <%= validationErrors.find(e => e.param === 'name') ? 'invalid' : '' %>"
+                                type="text" 
+                                name="name" 
+                                id="name"
+                                placeholder="Name"
+                                value="<%= oldInput.email %>">
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <div class="input-group flex-nowrap">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">@</span>
@@ -25,10 +38,8 @@
                                 name="email" 
                                 id="email"
                                 placeholder="Email"
-                                aria-label="Username"
-                                value="<%= oldInput.email %>">
+                                value="<%= oldInput.name %>">
                         </div>
-                      
                     </div>
                     <div class="form-group">
                         <div class="input-group flex-nowrap">
@@ -43,14 +54,13 @@
                                 placeholder="Password"
                                 value="<%= oldInput.password %>">
                         </div>
-                        
                     </div>
                     <div class="form-group">
                         <div class="input-group flex-nowrap">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">&#8226</span>
                             </div>
-                    <input 
+                                <input 
                                 class="form-control <%= validationErrors.find(e => e.param === 'confirmPassword') ? 'invalid' : '' %>"
                                 type="password" 
                                 name="confirmPassword" 
@@ -58,7 +68,6 @@
                                 placeholder="Confirm Password"
                                 value="<%= oldInput.confirmPassword %>">
                             </div>
-                        
                         </div>
                     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <button class="btn btn-outline-secondary" type="submit">Signup</button>

@@ -114,10 +114,10 @@ app.use(xss());
 app.use(
   multer({ storage: fileStorage, fileFilter: fileFilter }).single('image')
 );
-app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.enable('trust proxy');
 
@@ -136,6 +136,7 @@ app.use(flash());
 
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.ITEMS_PER_PAGE = 10;
 
   next();
 });
@@ -181,7 +182,6 @@ app.use((error, req, res, next) => {
   res.locals.csrfToken = undefined;
   res.status(500).render('500', {
     pageTitle: 'Error!',
-    path: '/500',
     isAuthenticated: req.session.isLoggedIn,
   });
 });

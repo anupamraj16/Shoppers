@@ -1,43 +1,42 @@
 const catchAsync = require('../utils/catchAsync');
 const fileHelper = require('../utils/file');
 
+// TODO: what is this doing here
 const { validationResult } = require('express-validator/check');
 
 const Product = require('../models/product');
-
-const ITEMS_PER_PAGE = 10;
 
 exports.getProducts = catchAsync(async (req, res, next) => {
   const page = +req.query.page || 1;
   let totalItems;
   const numProducts = await Product.find().countDocuments();
+  // TODO: Fix case of 0 products
   totalItems = numProducts;
   const products = await Product.find({ userId: req.user._id })
     .sort({ $natural: -1 })
-    .skip((page - 1) * ITEMS_PER_PAGE)
-    .limit(ITEMS_PER_PAGE);
-  // const products = await Product.find({ userId: req.user._id });
+    .skip((page - 1) * res.locals.ITEMS_PER_PAGE)
+    .limit(res.locals.ITEMS_PER_PAGE);
 
   res.render('admin/products', {
     prods: products,
     pageTitle: 'Admin Products',
-    path: '/admin/products',
     currentPage: page,
-    hasNextPage: ITEMS_PER_PAGE * page < totalItems,
+    hasNextPage: res.locals.ITEMS_PER_PAGE * page < totalItems,
     hasPreviousPage: page > 1,
     nextPage: page + 1,
     previousPage: page - 1,
-    lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE),
+    lastPage: Math.ceil(totalItems / res.locals.ITEMS_PER_PAGE),
   });
 });
 
 exports.getAddProduct = (req, res, next) => {
   res.render('admin/edit-product', {
     pageTitle: 'Add Product',
-    path: '/admin/add-product',
+    // TODO: check editing mode, hasError and errorMessage
     editing: false,
     hasError: false,
     errorMessage: null,
+    // TODO: check validationErrors
     validationErrors: [],
   });
 };
@@ -48,9 +47,9 @@ exports.postAddProduct = catchAsync(async (req, res, next) => {
   const price = req.body.price;
   const description = req.body.description;
   if (!image) {
+    // FIXME: provide appropriate status code in 5 places in this file
     return res.status(422).render('admin/edit-product', {
       pageTitle: 'Add Product',
-      path: '/admin/add-product',
       editing: false,
       hasError: true,
       product: {
@@ -59,6 +58,7 @@ exports.postAddProduct = catchAsync(async (req, res, next) => {
         description: description,
       },
       errorMessage: 'Attached file is not an image.',
+      //TODO: check validationErrors
       validationErrors: [],
     });
   }
@@ -68,7 +68,6 @@ exports.postAddProduct = catchAsync(async (req, res, next) => {
     console.log(errors.array());
     return res.status(422).render('admin/edit-product', {
       pageTitle: 'Add Product',
-      path: '/admin/add-product',
       editing: false,
       hasError: true,
       product: {
@@ -91,6 +90,7 @@ exports.postAddProduct = catchAsync(async (req, res, next) => {
     userId: req.user,
   });
   await product.save();
+  // TODO: provide user feedback
   res.redirect('/admin/products');
 });
 
@@ -106,7 +106,6 @@ exports.getEditProduct = catchAsync(async (req, res, next) => {
   }
   res.render('admin/edit-product', {
     pageTitle: 'Edit Product',
-    path: '/admin/edit-product',
     editing: editMode,
     product: product,
     hasError: false,
@@ -127,7 +126,7 @@ exports.postEditProduct = catchAsync(async (req, res, next) => {
   if (!errors.isEmpty()) {
     return res.status(422).render('admin/edit-product', {
       pageTitle: 'Edit Product',
-      path: '/admin/edit-product',
+
       editing: true,
       hasError: true,
       product: {
@@ -144,6 +143,7 @@ exports.postEditProduct = catchAsync(async (req, res, next) => {
   const product = await Product.findById(prodId);
 
   if (product.userId.toString() !== req.user._id.toString()) {
+    // TODO: provide user feedback and stay on same page
     return res.redirect('/');
   }
   product.title = updatedTitle;
@@ -153,9 +153,9 @@ exports.postEditProduct = catchAsync(async (req, res, next) => {
     fileHelper.deleteFile(product.imageUrl);
     product.imageUrl = image.path;
   }
-  return product.save().then((result) => {
-    res.redirect('/admin/products');
-  });
+  await product.save();
+  // TODO: provide user feedback
+  res.redirect('/admin/products');
 });
 
 exports.deleteProduct = catchAsync(async (req, res, next) => {
@@ -167,5 +167,6 @@ exports.deleteProduct = catchAsync(async (req, res, next) => {
   }
   // fileHelper.deleteFile(product.imageUrl);
   await Product.deleteOne({ _id: prodId, userId: req.user._id });
+  // TODO: provide user feedback
   res.status(200).json({ status: 'success!' });
 });

@@ -9,9 +9,8 @@ const Order = require('../models/order');
 const User = require('../models/user');
 
 const catchAsync = require('../utils/catchAsync');
-const { POINT_CONVERSION_UNCOMPRESSED } = require('constants');
 
-const ITEMS_PER_PAGE = 10;
+// TODO: SORT BY PRICE ETC in dropdown menu
 
 exports.getProducts = catchAsync(async (req, res, next) => {
   const page = +req.query.page || 1;
@@ -20,18 +19,20 @@ exports.getProducts = catchAsync(async (req, res, next) => {
   totalItems = numProducts;
   const products = await Product.find()
     .sort({ $natural: -1 })
-    .skip((page - 1) * ITEMS_PER_PAGE)
-    .limit(ITEMS_PER_PAGE);
+    // TODO: user prvided number of items per page
+    .skip((page - 1) * res.locals.ITEMS_PER_PAGE)
+    .limit(res.locals.ITEMS_PER_PAGE);
+
+  // TODO: Merge product-list and admin products views
   res.render('shop/product-list', {
     prods: products,
     pageTitle: 'Products',
-    path: '/products',
     currentPage: page,
-    hasNextPage: ITEMS_PER_PAGE * page < totalItems,
+    hasNextPage: res.locals.ITEMS_PER_PAGE * page < totalItems,
     hasPreviousPage: page > 1,
     nextPage: page + 1,
     previousPage: page - 1,
-    lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE),
+    lastPage: Math.ceil(totalItems / res.locals.ITEMS_PER_PAGE),
   });
 });
 
@@ -39,12 +40,14 @@ exports.getSearch = catchAsync(async (req, res, next) => {
   const searchParameters = req.query.s.split(' ');
   const page = +req.query.page || 1;
   let products = [];
+
+  // TODO: Add pagination
   for (let i = 0; i < searchParameters.length; i++) {
     const titleResult = await Product.find({
       title: { $regex: `${searchParameters[i]}`, $options: 'i' },
     });
-    // .skip((page - 1) * ITEMS_PER_PAGE)
-    // .limit(ITEMS_PER_PAGE);
+    // .skip((page - 1) * res.locals.ITEMS_PER_PAGE)
+    // .limit(res.locals.ITEMS_PER_PAGE);
 
     const descriptionResult = await Product.find({
       description: { $regex: `${searchParameters[i]}`, $options: 'i' },
@@ -53,18 +56,18 @@ exports.getSearch = catchAsync(async (req, res, next) => {
       ...new Set([...products, ...titleResult, ...descriptionResult]),
     ];
   }
-  // products.skip((page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE);
+  // products.skip((page - 1) * res.locals.ITEMS_PER_PAGE).limit(res.locals.ITEMS_PER_PAGE);
   const totalItems = products.length;
   res.render('shop/product-list', {
     prods: products,
     pageTitle: 'Products',
-    path: '/products',
     currentPage: page,
-    hasNextPage: ITEMS_PER_PAGE * page < totalItems,
+    hasNextPage: res.locals.ITEMS_PER_PAGE * page < totalItems,
     hasPreviousPage: page > 1,
     nextPage: page + 1,
     previousPage: page - 1,
-    lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE),
+    lastPage: Math.ceil(totalItems / res.locals.ITEMS_PER_PAGE),
+    // TODO: below line
     // searchQuery: searchParameters.join('+'),
   });
 });
@@ -72,21 +75,24 @@ exports.getSearch = catchAsync(async (req, res, next) => {
 exports.getProduct = catchAsync(async (req, res, next) => {
   const prodId = req.params.productId;
   const product = await Product.findById(prodId);
+  // TODO: Handle mongoose error if prodId is wrong, check below error
   if (!product) {
     return next(new AppError('No product found with that ID', 404));
   }
   res.render('shop/product-detail', {
     product: product,
     pageTitle: product.title,
-    path: '/products',
   });
 });
 
 exports.getCart = catchAsync(async (req, res, next) => {
+  // TODO: check execPopulate
   await req.user.populate('cart.items.productId').execPopulate();
   let total = 0;
   const products = req.user.cart.items;
-
+  // products.map((p) => {
+  //   console.log(`${req.protocol}://${req.get('host')}/${p.productId.imageUrl}`);
+  // });
   if (req.user.cart.count > 0) {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -96,12 +102,11 @@ exports.getCart = catchAsync(async (req, res, next) => {
       line_items: products.map((p) => {
         return {
           name: p.productId.title,
+          // FIXME: fix images
           // images: [
-          //   `${req.protocol}://${req.get('host')}/images/${
-          //     p.productId.imageUrl
-          //   }`,
+          //   `${req.protocol}://${req.get('host')}/${p.productId.imageUrl}`,
           // ],
-          description: p.productId.description,
+          // description: p.productId.description,
           amount: p.productId.price * 100,
           currency: 'usd',
           quantity: p.quantity,
@@ -115,7 +120,6 @@ exports.getCart = catchAsync(async (req, res, next) => {
     total /= 100;
 
     return res.render('shop/cart', {
-      path: '/cart',
       pageTitle: 'Your Cart',
       products: products,
       totalSum: total,
@@ -124,7 +128,6 @@ exports.getCart = catchAsync(async (req, res, next) => {
   }
 
   res.render('shop/cart', {
-    path: '/cart',
     pageTitle: 'Your Cart',
   });
 });
@@ -148,7 +151,6 @@ exports.postCartDeleteProduct = catchAsync(async (req, res, next) => {
   const quantity = req.body.quantity;
   const prodId = req.body.productId;
   await req.user.removeFromCart(prodId, quantity);
-  // console.log(req.user.cart.items[0].productId._id);
   res.redirect('/cart');
 });
 
@@ -192,6 +194,7 @@ const postOrder = catchAsync(async (session) => {
   });
 
   await order.save();
+  // FIXME:
   // const charge = await stripe.charges.create({
   //   amount: totalSum * 100,
   //   currency: 'usd',
@@ -208,7 +211,6 @@ exports.getOrders = catchAsync(async (req, res, next) => {
   orders.reverse();
 
   res.render('shop/orders', {
-    path: '/orders',
     pageTitle: 'Your Orders',
     orders: orders,
   });
@@ -217,7 +219,7 @@ exports.getOrders = catchAsync(async (req, res, next) => {
 exports.getInvoice = catchAsync(async (req, res, next) => {
   const orderId = req.params.orderId;
   const order = await Order.findById(orderId);
-  const d = new Date(Date.now()).toString().substr(0, 24);
+  const d = order.createdAt.toString().substr(0, 24);
 
   if (!order) {
     return next(new Error('No order found.'));
